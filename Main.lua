@@ -4,6 +4,7 @@
 function setup()
     print("Hello World!")
     w = World(math.random(),0)
+    parameter.watch("1/DeltaTime")
 end
 
 -- This function gets called once every frame
@@ -17,4 +18,3 @@ function draw()
     -- Do your drawing here
     w:draw()
 end
-
