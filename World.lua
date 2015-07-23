@@ -43,6 +43,14 @@ function World:draw()
     end
 end
 
+function World:testPoint(x,y)
+    local val
+    local bx,by = x/(WIDTH/30) + 1, y/(HEIGHT/30) + 1
+    local bx,by = math.floor(bx),math.floor(by)
+    val = self.worldMap[bx][by].id
+    return val
+end
+
 function World:updateLighting(x,y)
     local maxl = self.worldMap[x][y].lightl
     for xx=-1,1 do
