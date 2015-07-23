@@ -5,6 +5,8 @@ function setup()
     print("Hello World!")
     w = World(math.random(),0)
     parameter.watch("1/DeltaTime")
+    c = CircleJoystick(100,100)
+    touches = {}
 end
 
 -- This function gets called once every frame
@@ -17,4 +19,9 @@ function draw()
 
     -- Do your drawing here
     w:draw()
+    c:draw()
+end
+
+function touched(t)
+    touches[t.id] = t
 end

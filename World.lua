@@ -45,9 +45,7 @@ end
 
 function World:testPoint(x,y)
     local val
-    local bx,by = x/(WIDTH/30) + 1, y/(HEIGHT/30) + 1
-    local bx,by = math.floor(bx),math.floor(by)
-    val = self.worldMap[bx][by].id
+    val = self.worldMap[x][y].id
     return val
 end
 
@@ -70,6 +68,16 @@ function World:updateLighting(x,y)
         self.worldMap[x][y].lightl = maxl
     end
     self.lightMesh:setRectColor(self.worldMap[x][y].lmi,0,0,0,((5-self.worldMap[x][y].lightl)/5)*255)
+end
+function World:convertToWorld(x,y)
+    local bx,by = x/(WIDTH/30) + 1, y/(HEIGHT/30) + 1
+    bx,by = math.floor(bx),math.floor(by)
+    return bx,by
+end
+
+function World:convertFromWorld(x,y)
+    local rx,ry = (x-1) * WIDTH/30 + WIDTH/60, (y-1) * HEIGHT/30 + HEIGHT/60
+    return rx,ry
 end
 function World:touched(touch)
     -- Codea does not automatically call this method
