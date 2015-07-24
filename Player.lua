@@ -5,6 +5,7 @@ function Player:init(x,y)
     self.pos = vec2(x,y)
     self.img = readImage("Project:player")
     self.d = vec2(WIDTH/(w.mapSize + 10), WIDTH/(w.mapSize+10) * 11/26)
+    self.rotation = 0
 end
 
 function Player:draw()
@@ -12,7 +13,7 @@ function Player:draw()
     fill(255,0,0)  
     pushMatrix()
     translate(self.pos.x,self.pos.y)
-    rotate(c.rotation)
+    rotate(self.rotation)
     sprite(self.img, 0,0,self.d.x,self.d.y)
     popMatrix()
 end

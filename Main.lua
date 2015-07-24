@@ -23,6 +23,9 @@ function draw()
     p:draw()
     c:draw()
     p:move(c.acc * 4)
+    if c.tId then
+        p.rotation = c.rotation
+    end
 end
 
 function touched(t)
