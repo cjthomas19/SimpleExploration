@@ -3,7 +3,7 @@
 -- Use this function to perform your initial setup
 function setup()
     print("Hello World!")
-    w = World(math.random(),0)
+    w = World(math.random(1000)/1000,0)
     parameter.watch("1/DeltaTime")
     c = CircleJoystick(100,100)
     touches = {}
