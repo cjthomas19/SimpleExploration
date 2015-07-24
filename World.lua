@@ -2,6 +2,10 @@ World = class()
 
 function World:init(seed,th)
     -- you can accept and set parameters here
+    self.blockdata = {
+    {id = 0,texX = 0,texY = 0.81},
+    {id = 1,texX = 0.21,texY = 0.81}
+    }
     self.seed = seed --should be a value between 0 and 1
     self.threshold = th --should be a value between -1 and 1, depending on the size of mountains desired
     self.mapSize = 100
@@ -19,11 +23,11 @@ function World:init(seed,th)
             local ii = self.lightMesh:addRect((x-1)*WIDTH/self.mapSize+WIDTH/(self.mapSize * 2), (y-1)*WIDTH/self.mapSize+WIDTH/(self.mapSize * 2), WIDTH/self.mapSize,WIDTH/self.mapSize)
             if n>=self.threshold then
                 self.worldMap[x][y] = block(1,0,i,ii)
-                self.mesh:setRectTex(i,0.21,0.81,0.19,0.19)
+                self.mesh:setRectTex(i,self.blockdata[2].texX,self.blockdata[2].texY,0.19,0.19)
                 self.lightMesh:setRectColor(ii,0,0,0,255)
             else
                 self.worldMap[x][y] = block(0,5,i,ii)
-                self.mesh:setRectTex(i,0,0.81,0.19,0.19)
+                self.mesh:setRectTex(i,self.blockdata[1].texX,self.blockdata[1].texY,0.19,0.19)
                 self.lightMesh:setRectColor(ii,0,0,0,0)
             end
         end
