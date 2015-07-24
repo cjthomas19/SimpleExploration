@@ -48,9 +48,11 @@ function World:draw()
     noStroke()
     noSmooth()
     self.mesh:draw()
+    p:draw()
     if self.light then
         self.lightMesh:draw()
     end
+    
 end
 
 function World:testPoint(x,y)
@@ -91,4 +93,18 @@ function World:convertFromWorld(x,y)
 end
 function World:touched(touch)
     -- Codea does not automatically call this method
+end
+
+function World:breakBlock(x,y)
+    if self.worldMap[x][y].id ~= 0 then
+        self.worldMap[x][y].id = 0
+        for i=-5,5 do
+            for ii=-5,5 do
+                if x+i>0 and x+i<self.mapSize and y+ii>0 and y+ii<self.mapSize then
+                    self:updateLighting(x+i,y+ii)
+                end
+            end
+        end
+        self.mesh:setRectTex(self.worldMap[x][y].meshIndex,self.blockdata[1].texX,self.blockdata[1].texY,0.19,0.19)
+    end
 end

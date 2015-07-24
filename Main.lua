@@ -6,6 +6,7 @@ function setup()
     w = World(math.random(1000)/1000,-0.1)
     parameter.watch("1/DeltaTime")
     c = CircleJoystick(100,100)
+    b = CircleJoystick(WIDTH-100,100)
     touches = {}
     p = Player(w:convertFromWorld(2,2))
 end
@@ -20,11 +21,14 @@ function draw()
 
     -- Do your drawing here
     w:draw()
-    p:draw()
     c:draw()
-    p:move(c.acc * 4)
+    b:draw()
+    p:move(c.acc*4)
     if c.tId then
         p.rotation = c.rotation
+    end
+    if b.tId then
+        p:breakBlock(b.rotation)
     end
 end
 

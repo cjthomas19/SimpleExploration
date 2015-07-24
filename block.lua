@@ -6,7 +6,7 @@ function block:init(id,lightLevel, meshIndex,lightMeshIndex)
     self.meshIndex = meshIndex
     self.lmi = lightMeshIndex
     self.lightl = lightLevel
-    self.h = 100
+    self.h = 1
 end
 
 function block:draw()

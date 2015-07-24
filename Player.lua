@@ -6,6 +6,7 @@ function Player:init(x,y)
     self.img = readImage("Project:player")
     self.d = vec2(WIDTH/(w.mapSize + 10), WIDTH/(w.mapSize+10) * 11/26)
     self.rotation = 0
+    self.breakTimer = 0
 end
 
 function Player:draw()
@@ -49,4 +50,30 @@ function Player:testColl(x,y)
         end
     end
     return collX,collY
+end
+
+function Player:breakBlock(rot)
+    local num
+    if rot<=45 or rot>315 then
+        num = 1
+    elseif rot>45 and rot<=135 then
+        num = 2
+    elseif rot>135 and rot<=225 then
+        num = 3
+    else
+        num=4
+    end
+    local blockPos = {
+    vec2(0,1),
+    vec2(-1,0),
+    vec2(0,-1),
+    vec2(1,0)
+    }
+    self.breakTimer = self.breakTimer + 1
+    local bx,by = w:convertToWorld(self.pos.x,self.pos.y)
+    bx,by = bx + blockPos[num].x, by + blockPos[num].y
+    if self.breakTimer > w.worldMap[bx][by].h then
+        w:breakBlock(bx,by)
+        self.breakTimer = 0
+    end
 end
