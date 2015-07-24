@@ -8,7 +8,7 @@ function World:init(seed,th)
     }
     self.seed = seed --should be a value between 0 and 1
     self.threshold = th --should be a value between -1 and 1, depending on the size of mountains desired
-    self.mapSize = 100
+    self.mapSize = 40
     self.light = true
     self.blocks = readImage("Project:blocks")
     self.mesh = mesh()

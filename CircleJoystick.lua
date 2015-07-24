@@ -13,13 +13,13 @@ function CircleJoystick:draw()
     -- Codea does not automatically call this method
     noStroke()
     smooth()
-    fill(255, 255, 255, 255)
+    fill(255, 255, 255, 127)
     ellipse(self.x,self.y,100,100)
-    stroke(211, 211, 211, 255)
+    stroke(211, 211, 211, 127)
     strokeWidth(20)
     line(self.x, self.y, self.joy.x, self.joy.y)
     noStroke()
-    fill(255, 0, 0, 255)
+    fill(255, 0, 0, 127)
     ellipse(self.joy.x, self.joy.y, 50, 50)
     
     for i,v in pairs(touches) do
