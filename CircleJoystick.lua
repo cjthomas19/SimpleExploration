@@ -6,11 +6,13 @@ function CircleJoystick:init(x,y)
     self.y = y
     self.joy=vec2(x,y)
     self.tId=nil
+    self.rotation = 0
 end
 
 function CircleJoystick:draw()
     -- Codea does not automatically call this method
     noStroke()
+    smooth()
     fill(255, 255, 255, 255)
     ellipse(self.x,self.y,100,100)
     stroke(211, 211, 211, 255)

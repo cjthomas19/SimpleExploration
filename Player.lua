@@ -3,13 +3,17 @@ Player = class()
 function Player:init(x,y)
     -- you can accept and set parameters here
     self.pos = vec2(x,y)
-    self.d = WIDTH/32
+    self.d = WIDTH/40
 end
 
 function Player:draw()
     -- Codea does not automatically call this method
     fill(255,0,0)  
-    ellipse(self.pos.x,self.pos.y,self.d)
+    pushMatrix()
+    translate(self.pos.x,self.pos.y)
+    rotate(c.rotation)
+    rect(-self.d/2,-self.d/2,self.d,self.d)
+    popMatrix()
 end
 
 function Player:touched(touch)
