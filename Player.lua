@@ -32,7 +32,7 @@ function Player:testColl(x,y)
     local collX,collY = false, false
     for xx=-1,1 do
         for yy=-1,1 do
-            if w.worldMap[bx+xx][by+yy].id == 1 then
+            if bx + xx > 0 and bx + xx < 31 and by + yy > 0 and by + yy < 31 and w.worldMap[bx+xx][by+yy].id == 1 then
                 if self.pos.x >= ((bx+xx) - 1) * WIDTH/30 - self.d/2 and self.pos.x <= ((bx+xx) - 1) * WIDTH/30 + WIDTH/30 + self.d/2 and not (y<(by+yy-1) * WIDTH/30 - self.d/2 or y>(by+yy-1) * WIDTH/30 + WIDTH/30 + self.d/2) then
                    collY = true 
                 end
