@@ -13,8 +13,8 @@ function World:init(seed,th)
         self.worldMap[x] = {}
         for y=1,30 do
             local n = noise(x/10,y/10,seed*3)
-            local i = self.mesh:addRect((x-1)*WIDTH/30+WIDTH/60, (y-1)*HEIGHT/30+HEIGHT/60, WIDTH/30,HEIGHT/30)
-            local ii = self.lightMesh:addRect((x-1)*WIDTH/30+WIDTH/60, (y-1)*HEIGHT/30+HEIGHT/60, WIDTH/30,HEIGHT/30)
+            local i = self.mesh:addRect((x-1)*WIDTH/30+WIDTH/60, (y-1)*WIDTH/30+WIDTH/60, WIDTH/30,WIDTH/30)
+            local ii = self.lightMesh:addRect((x-1)*WIDTH/30+WIDTH/60, (y-1)*WIDTH/30+WIDTH/60, WIDTH/30,WIDTH/30)
             if n>=self.threshold then
                 self.worldMap[x][y] = block(1,0,i,ii)
                 self.mesh:setRectTex(i,0.2,0.8,0.2,0.2)
@@ -26,6 +26,10 @@ function World:init(seed,th)
             end
         end
     end
+    self.worldMap[2][2].id = 0
+    self.worldMap[2][2].lightl = 5
+    self.mesh:setRectTex(self.worldMap[2][2].meshIndex,0,0.8,0.2,0.2)
+    self.lightMesh:setRectColor(self.worldMap[2][2].lmi,0,0,0,0)
     for x = 1,30 do
         for y = 1,30 do
             self:updateLighting(x,y)
@@ -38,9 +42,7 @@ function World:draw()
     noStroke()
     noSmooth()
     self.mesh:draw()
-    if not y then
-        self.lightMesh:draw()
-    end
+    self.lightMesh:draw()
 end
 
 function World:testPoint(x,y)
@@ -70,13 +72,13 @@ function World:updateLighting(x,y)
     self.lightMesh:setRectColor(self.worldMap[x][y].lmi,0,0,0,((5-self.worldMap[x][y].lightl)/5)*255)
 end
 function World:convertToWorld(x,y)
-    local bx,by = x/(WIDTH/30) + 1, y/(HEIGHT/30) + 1
+    local bx,by = x/(WIDTH/30) + 1, y/(WIDTH/30) + 1
     bx,by = math.floor(bx),math.floor(by)
     return bx,by
 end
 
 function World:convertFromWorld(x,y)
-    local rx,ry = (x-1) * WIDTH/30 + WIDTH/60, (y-1) * HEIGHT/30 + HEIGHT/60
+    local rx,ry = (x-1) * WIDTH/30 + WIDTH/60, (y-1) * WIDTH/30 + WIDTH/60
     return rx,ry
 end
 function World:touched(touch)

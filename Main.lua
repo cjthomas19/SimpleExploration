@@ -7,6 +7,7 @@ function setup()
     parameter.watch("1/DeltaTime")
     c = CircleJoystick(100,100)
     touches = {}
+    p = Player(w:convertFromWorld(2,2))
 end
 
 -- This function gets called once every frame
@@ -19,7 +20,9 @@ function draw()
 
     -- Do your drawing here
     w:draw()
+    p:draw()
     c:draw()
+    p:move(c.acc * 4)
 end
 
 function touched(t)
