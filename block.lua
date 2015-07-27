@@ -1,12 +1,12 @@
 block = class()
 
-function block:init(id,lightLevel, meshIndex,lightMeshIndex)
+function block:init(id,lightLevel, meshIndex,lightMeshIndex,breakt)
     -- you can accept and set parameters here
     self.id = id
     self.meshIndex = meshIndex
     self.lmi = lightMeshIndex
     self.lightl = lightLevel
-    self.h = 1
+    self.h = breakt
 end
 
 function block:draw()

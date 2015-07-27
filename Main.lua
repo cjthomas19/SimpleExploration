@@ -3,6 +3,12 @@
 -- Use this function to perform your initial setup
 function setup()
     print("Hello World!")
+    adj = {
+    vec2(0,1),
+    vec2(-1,0),
+    vec2(0,-1),
+    vec2(1,0)
+    }
     w = World(math.random(1000)/1000,-0.1)
     parameter.watch("1/DeltaTime")
     c = CircleJoystick(100,100)
