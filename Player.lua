@@ -19,28 +19,10 @@ function Player:draw()
     rotate(self.rotation)
     sprite(self.img, 0,0,self.d.x,self.d.y)
     popMatrix()
-    if self.invShow then
-        self:showInventory()
-    end
 end
 
 function Player:touched(touch)
     -- Codea does not automatically call this method
-end
-
-function Player:showInventory()
-    background(4, 0, 255, 255)
-    for x = 0,10 do
-        for y = 0,10 do
-            fill(127, 127, 127, 255)
-            stroke(0)
-            strokeWidth(5)
-            rect(x*WIDTH/10,y*HEIGHT/10,WIDTH/10,HEIGHT/10)
-        end
-    end
-    for i,v in pairs(self.inventory) do
-        v:draw(((i-1)%10)*WIDTH/10 + WIDTH/20,(math.ceil(i/10)-1)*HEIGHT/10+HEIGHT/20)
-    end
 end
 
 function Player:move(amount)
@@ -106,4 +88,3 @@ function Player:give(i,count)
         table.insert(self.inventory,item(i,count))
     end
 end
-

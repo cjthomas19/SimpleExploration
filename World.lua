@@ -2,10 +2,10 @@ World = class()
 
 function World:init(seed,th)
     -- you can accept and set parameters here
-    
+    self.entities = {}
     self.blockdata = {
     {id = 1,breakTime = 0},
-    {id = 2,breakTime = 50, item = 2},
+    {id = 2,breakTime = 0, item = 2},
     {id = 3,breakTime = 100, item = 3},
     {id = 4,breakTime = 100, item = 4},
     {id = 5,breakTime = 100, item = 5},
@@ -74,6 +74,7 @@ function World:draw()
     if self.light and not p.invShow then
         self.lightMesh:draw() -- only draw if self.light is true
     end
+    self:renderEntities()
 end
 
 function World:generateOres()
@@ -130,13 +131,17 @@ function World:convertFromWorld(x,y)
     local rx,ry = (x-1) * WIDTH/self.mapSize + WIDTH/(self.mapSize * 2), (y-1) * WIDTH/self.mapSize + WIDTH/(self.mapSize * 2) -- conversions
     return rx,ry
 end
-function World:touched(touch)
+function World:renderEntities()
     -- Codea does not automatically call this method
+    for i,v in pairs(self.entities) do
+        v:draw()
+    end
 end
 
 function World:breakBlock(x,y)
     if self.worldMap[x][y].id ~= 1 then -- if not air then
         local id = self.worldMap[x][y].id
+        sound(SOUND_HIT, 33341)
         self.worldMap[x][y].id = 1 -- set to air
         for i=-5,5 do
             for ii=-5,5 do
@@ -146,6 +151,14 @@ function World:breakBlock(x,y)
             end
         end
         self:setMeshBlock(self.worldMap[x][y].meshIndex,1) -- update the block
-        p:give(self.blockdata[id].item,1)
+        --p:give(self.blockdata[id].item,1)
+        local xx,yy = self:convertFromWorld(x,y)
+        self:summonItem(xx,yy,self.blockdata[id].item,1)
     end
+end
+function World:killEntity(i)
+    self.entities[i] = nil
+end
+function World:summonItem(x,y,dataVal,count)
+    self.entities[#self.entities+1] = entityItem(x,y,#self.entities+1,item(dataVal,count))
 end

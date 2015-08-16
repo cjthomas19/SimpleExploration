@@ -7,6 +7,8 @@ function CircleJoystick:init(x,y)
     self.joy=vec2(x,y)
     self.tId=nil
     self.rotation = 0
+    self.acc=vec2(0,0)
+    self.rotation=0
 end
 
 function CircleJoystick:draw()
@@ -22,26 +24,27 @@ function CircleJoystick:draw()
     fill(255, 0, 0, 127)
     ellipse(self.joy.x, self.joy.y, 50, 50)
     
-    for i,v in pairs(touches) do
-        if vec2(v.x,v.y):dist(vec2(self.x,self.y))<=50 and v.state~=ENDED then
-            self.tId=i
-        end
+end
+
+function CircleJoystick:touched(t)
+    if vec2(t.x,t.y):dist(vec2(self.x,self.y))<=50 and t.state~=ENDED then
+        self.tId=t.id
     end
-    if self.tId~=nil then
-        self.dif=vec2(touches[self.tId].x, touches[self.tId].y)-vec2(self.x,self.y)
+    if self.tId~=nil and self.tId == t.id then
+        self.dif=vec2(t.x, t.y)-vec2(self.x,self.y)
         self.dif=self.dif:normalize()
         self.acc=self.dif
-        if vec2(touches[self.tId].x, touches[self.tId].y):dist(vec2(self.x,self.y))>=50 then
-        self.joy=self.dif*50+vec2(self.x,self.y)
-        else self.joy.x, self.joy.y=touches[self.tId].x, touches[self.tId].y 
+        if vec2(t.x, t.y):dist(vec2(self.x,self.y))>=50 then
+            self.joy=self.dif*50+vec2(self.x,self.y)
+        else self.joy.x, self.joy.y=t.x, t.y
         end
-        if touches[self.tId].state==ENDED then
+        if t.state==ENDED then
             self.tId=nil
             self.joy=vec2(self.x,self.y)
             self.acc=vec2(0,0)
             self.rotation=0
         else
-self.rotation=-math.deg(math.atan2(self.x-touches[self.tId].x,self.y-touches[self.tId].y))+180
+            self.rotation=-math.deg(math.atan2(self.x-t.x,self.y-t.y))+180
         end
     end
     if not self.acc then
