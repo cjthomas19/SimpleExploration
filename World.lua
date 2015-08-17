@@ -71,7 +71,7 @@ function World:draw()
     noSmooth()
     self.mesh:draw()
     p:draw()
-    if self.light and not p.invShow then
+    if self.light and g.state == STATE_MAIN then
         self.lightMesh:draw() -- only draw if self.light is true
     end
     self:renderEntities()
@@ -88,7 +88,7 @@ function World:generateOres()
                     self.worldMap[curPos.x][curPos.y].id = i 
                     self.worldMap[curPos.x][curPos.y].h = self.blockdata[i].breakTime
                 end
-                curPos = curPos + adj[math.random(1,4)] -- update position
+                curPos = curPos + ADJ[math.random(1,4)] -- update position
             end
         end
         
@@ -160,5 +160,5 @@ function World:killEntity(i)
     self.entities[i] = nil
 end
 function World:summonItem(x,y,dataVal,count)
-    self.entities[#self.entities+1] = entityItem(x,y,#self.entities+1,item(dataVal,count))
+    self.entities[#self.entities+1] = entityItem(x,y,#self.entities+1,item(dataVal,count,x,y,1))
 end

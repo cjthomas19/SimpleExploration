@@ -2,38 +2,95 @@ gui = class()
 
 function gui:init()
     -- you can accept and set parameters
-    self.buttons = {inv = SquareButton(WIDTH-100,HEIGHT-100,50,50,readImage("Project:inv"),function() p.invShow = not p.invShow end,2)}
+    self.buttons = {inv = SquareButton(WIDTH-100,HEIGHT-100,50,50,readImage("Project:inv"),function() g.state = STATE_INV end,2),back = SquareButton(WIDTH-100,100,50,50,readImage("Project:back"),function() g.state = STATE_MAIN end,2),split = SquareButton(WIDTH-200,100,50,50,readImage("Project:split"),function() self.split = true end,2)}
+    self.state = STATE_MAIN
+    self.guiScreens = {inv = readImage("Project:inventoryBackdrop")}
 end
 
 function gui:draw(i)
     -- Codea does not automatically call this method
-    if p.invShow then
+    if self.state == STATE_MAIN then
+        self.buttons.inv:draw()
+    elseif self.state == STATE_INV then
         self:showInventory()
+        self.buttons.back:draw()
+        self.buttons.split:draw()
     end
-    if i==0 then
-        self.buttons.inv:draw()
-    else
-        self.buttons.inv:draw()
-    end
-    
 end
 
 function gui:touched(touch)
     -- Codea does not automatically call this method
-    self.buttons.inv:touched(touch)
+    local tx,ty = math.ceil(touch.x/(WIDTH/10)),math.ceil(touch.y/(HEIGHT/10))
+    if self.state == STATE_MAIN then
+        self.buttons.inv:touched(touch)
+    elseif self.state == STATE_INV then
+        self.buttons.back:touched(touch)
+        self.buttons.split:touched(touch)
+        if not self.buttons.inv.pressed and not self.buttons.back.pressed and not self.buttons.split.pressed then
+            if touch.x<4 * WIDTH/10 and not self.heldItemIndex and not self.split then
+                if p.inventory[(ty-1)*4 + tx] then
+                    self.holdingItemTouch = touch.id
+                    self.heldItemIndex = (ty-1)*4 + tx
+                end
+            elseif self.split and touch.x<4 * WIDTH/10 and not self.heldItemIndex then
+                self:splitItem((ty-1)*4 + tx)
+                self.split = false
+            end
+        end
+    end
+    if self.holdingItemTouch == touch.id then
+        if touch.state ~= ENDED then
+            p.inventory[self.heldItemIndex].x,p.inventory[self.heldItemIndex].y = touch.x,touch.y
+        else
+            if touch.x<4 * WIDTH/10 and not self.split then
+                self:moveItem(self.heldItemIndex,(ty-1)*4 + tx)
+                self.holdingItemTouch = nil
+                self.heldItemIndex = nil
+            else
+                p.inventory[self.heldItemIndex].x,p.inventory[self.heldItemIndex].y = (self.heldItemIndex%4)*WIDTH/10 + WIDTH/20,((self.heldItemIndex/4)-1)*HEIGHT/10+HEIGHT/20
+            end
+        end
+    end
+end
+
+function gui:splitItem(i)
+    print(i)
+    if p.inventory[i] and p.inventory[i].count>1 then
+        p:give(p.inventory[i].id,math.ceil(p.inventory[i].count/2),false)
+        p.inventory[i].count = math.floor(p.inventory[i].count/2)
+    end
+end
+
+function gui:moveItem(i,ii)
+    if i ~= ii then
+        if not p.inventory[ii] then
+            local a = p.inventory[i]
+            p.inventory[ii] = item(a.id,a.count,a.x,a.y)
+            p.inventory[ii].x,p.inventory[ii].y = ((ii-1)%4)*WIDTH/10 + WIDTH/20,(math.ceil((ii)/4)-1)*HEIGHT/10+HEIGHT/20
+            p.inventory[i] = nil
+        else
+            if p.inventory[i].id ~= p.inventory[ii].id then
+                local a = p.inventory[i]
+                local b = p.inventory[ii]
+                p.inventory[i] = item(b.id,b.count,b.x,b.y)
+                p.inventory[ii] = item(a.id,a.count,a.x,a.y)
+                p.inventory[ii].x,p.inventory[ii].y = ((ii-1)%4)*WIDTH/10 + WIDTH/20,(math.ceil((ii)/4)-1)*HEIGHT/10+HEIGHT/20
+                p.inventory[i].x,p.inventory[i].y = ((i-1)%4)*WIDTH/10 + WIDTH/20,(math.ceil((i)/4)-1)*HEIGHT/10+HEIGHT/20
+            else
+                p.inventory[ii].count = p.inventory[ii].count + p.inventory[i].count
+                p.inventory[ii].x,p.inventory[ii].y = ((ii-1)%4)*WIDTH/10 + WIDTH/20,(math.ceil((ii)/4)-1)*HEIGHT/10+HEIGHT/20
+                p.inventory[i] = nil
+            end
+        end
+    else
+        p.inventory[i].x,p.inventory[i].y = ((i-1)%4)*WIDTH/10 + WIDTH/20,(math.ceil((i)/4)-1)*HEIGHT/10+HEIGHT/20
+    end
 end
 
 function gui:showInventory()
-    background(4, 0, 255, 255)
-    for x = 0,3 do
-        for y = 0,9 do
-            fill(127, 127, 127, 255)
-            stroke(0)
-            strokeWidth(5)
-            rect(x*WIDTH/10,y*HEIGHT/10,WIDTH/10,HEIGHT/10)
-        end
-    end
+    sprite(self.guiScreens.inv,WIDTH/2,HEIGHT/2,WIDTH,HEIGHT)
     for i,v in pairs(p.inventory) do
-        v:draw(((i-1)%4)*WIDTH/10 + WIDTH/20,(math.ceil(i/4)-1)*HEIGHT/10+HEIGHT/20)
+        v:draw()
     end
 end
+

@@ -6,13 +6,14 @@ function entityItem:init(x,y,i,it)
     self.i = i
     self.scaleFactor = 1/4
     entity.init(self,x,y,i,vec2(WIDTH/10 * self.scaleFactor,HEIGHT/10 * self.scaleFactor))
+    self.item.sf = self.scaleFactor
 end
 
 function entityItem:draw()
     -- Codea does not automatically call this method
-    self.item:draw(self.pos.x,self.pos.y,self.scaleFactor)
+    self.item:draw()
     if self:testCollWithPlayer(p) then
-        p:give(self.item.id,self.item.count)
+        p:give(self.item.id,self.item.count,true)
         w:killEntity(self.i)
     end
 end

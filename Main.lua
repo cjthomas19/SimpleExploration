@@ -1,14 +1,19 @@
 
 
 -- Use this function to perform your initial setup
+displayMode(FULLSCREEN_NO_BUTTONS)
 function setup()
-    print("Hello World!")
-    adj = {
+    --Define constants
+    print(WIDTH/10,HEIGHT/10)
+    ADJ = {
     vec2(0,1),
     vec2(-1,0),
     vec2(0,-1),
     vec2(1,0)
     }
+    STATE_MAIN=1
+    STATE_INV=2
+    print("Hello World!")
     w = World(math.random(1000)/1000,0)
     parameter.watch("1/DeltaTime")
     c = CircleJoystick(100,100)
@@ -28,7 +33,7 @@ function draw()
 
     -- Do your drawing here
     w:draw()
-    if not p.invShow then
+    if g.state == STATE_MAIN then
         c:draw()
         b:draw()
     end
@@ -39,11 +44,11 @@ function draw()
     if b.tId then
         p:breakBlock(b.rotation)
     end
-    g:draw(0)
+    g:draw()
 end
 
 function touched(t)
-    if not p.invShow then
+    if g.state == STATE_MAIN then
         c:touched(t)
         b:touched(t)
     end
