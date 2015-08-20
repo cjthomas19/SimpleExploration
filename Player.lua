@@ -3,12 +3,11 @@ Player = class(entity)
 function Player:init(x,y)
     -- you can accept and set parameters here
     entity.init(self,x,y,1,vec2(WIDTH/(w.mapSize + 10), WIDTH/(w.mapSize+10) * 11/26))
-    self.pos = vec2(x,y)
     self.img = readImage("Project:player")
     self.rotation = 0
     self.breakTimer = 0
     self.inventory = {}
-    self.craftSlots = {{}}
+    self.craftSlots = {}
     self.output = nil
     self.invShow = false
 end
@@ -25,6 +24,14 @@ end
 
 function Player:destroy()
     
+end
+
+function Player:idTable()
+    local tbl = {}
+    for i,v in pairs(self.craftSlots) do
+        tbl[i] = v.id
+    end
+    return tbl
 end
 
 function Player:breakBlock(rot)
@@ -51,6 +58,7 @@ end
 
 function Player:give(i,count,stack)
     local stacked = false
+    
     for a,v in pairs(self.inventory) do
         if i == v.id and stack then
             v.count = v.count + count

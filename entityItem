@@ -1,12 +1,10 @@
 entityItem = class(entity)
 
-function entityItem:init(x,y,i,it)
+function entityItem:init(x,y,i,id,count)
     -- you can accept and set parameters here
-    self.item = it
+    self.item = item(id,count,x,y,1/4)
     self.i = i
-    self.scaleFactor = 1/4
-    entity.init(self,x,y,i,vec2(WIDTH/10 * self.scaleFactor,HEIGHT/10 * self.scaleFactor))
-    self.item.sf = self.scaleFactor
+    entity.init(self,x,y,i,vec2(WIDTH/10 * self.item.sf,HEIGHT/10 * self.item.sf))
 end
 
 function entityItem:draw()

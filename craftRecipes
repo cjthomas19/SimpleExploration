@@ -1,0 +1,36 @@
+craftRecipes = class()
+
+function craftRecipes:init()
+    -- you can accept and set parameters here
+    recipes = {
+    {
+    recipe = {3,3,3,nil,nil,nil},
+    result = {id = 10,count = 1}
+    },
+    {
+    recipe = {2,2,2,nil,nil,nil},
+    result = {id = 9,count = 1}
+    },
+    {
+    recipe = {4,4,4,nil,nil,nil},
+    result = {id = 11,count = 1}
+    }
+    }
+end
+
+function craftRecipes:getResult(r)
+    local match = true
+    for i,v in pairs(recipes) do
+        for i=1,6 do
+            if r[i] ~= v.recipe[i] then
+                break
+            end
+            return v.result
+        end
+    end
+    return nil
+end
+
+function craftRecipes:touched(touch)
+    -- Codea does not automatically call this method
+end

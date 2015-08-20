@@ -151,7 +151,6 @@ function World:breakBlock(x,y)
             end
         end
         self:setMeshBlock(self.worldMap[x][y].meshIndex,1) -- update the block
-        --p:give(self.blockdata[id].item,1)
         local xx,yy = self:convertFromWorld(x,y)
         self:summonItem(xx,yy,self.blockdata[id].item,1)
     end
@@ -160,5 +159,5 @@ function World:killEntity(i)
     self.entities[i] = nil
 end
 function World:summonItem(x,y,dataVal,count)
-    self.entities[#self.entities+1] = entityItem(x,y,#self.entities+1,item(dataVal,count,x,y,1))
+    table.insert(self.entities,entityItem(x,y,#self.entities+1,dataVal,count,1))
 end

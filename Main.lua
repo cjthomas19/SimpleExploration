@@ -4,7 +4,8 @@
 displayMode(FULLSCREEN_NO_BUTTONS)
 function setup()
     --Define constants
-    print(WIDTH/10,HEIGHT/10)
+    items = readImage("Project:items")
+    cr = craftRecipes()
     ADJ = {
     vec2(0,1),
     vec2(-1,0),
@@ -13,7 +14,7 @@ function setup()
     }
     STATE_MAIN=1
     STATE_INV=2
-    print("Hello World!")
+
     w = World(math.random(1000)/1000,0)
     parameter.watch("1/DeltaTime")
     c = CircleJoystick(100,100)
