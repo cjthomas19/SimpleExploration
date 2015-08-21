@@ -34,6 +34,15 @@ function Player:idTable()
     return tbl
 end
 
+function Player:decreaseCraftQuant(q)
+    for i,v in pairs(p.craftSlots) do
+        v.count = v.count - q
+        if v.count <= 0 then
+            p.craftSlots[i] = nil
+        end
+    end
+end
+
 function Player:breakBlock(rot)
     local num
     if rot<=45 or rot>315 then

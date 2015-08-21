@@ -23,9 +23,11 @@ function craftRecipes:getResult(r)
     for i,v in pairs(recipes) do
         for i=1,6 do
             if r[i] ~= v.recipe[i] then
-                break
+                match = false
             end
-            return v.result
+        end
+        if match then return v.result 
+        else match=true
         end
     end
     return nil
