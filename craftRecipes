@@ -14,6 +14,26 @@ function craftRecipes:init()
     {
     recipe = {4,4,4,nil,nil,nil},
     result = {id = 11,count = 1}
+    },
+    {
+    recipe = {12,12,12,nil,nil,nil},
+    result = {id = 13,count = 1}
+    },
+    {
+    recipe = {nil,12,nil,13,13,13},
+    result = {id = 16,count = 1}
+    },
+    {
+    recipe = {nil,12,nil,9,9,9},
+    result = {id = 17,count = 1}
+    },
+    {
+    recipe = {nil,12,nil,10,10,10},
+    result = {id = 18, count = 1}
+    },
+    {
+    recipe = {nil,12,nil,11,11,11},
+    result = {id = 19, count = 1}
     }
     }
 end

@@ -5,14 +5,36 @@ function World:init(seed,th)
     self.entities = {}
     self.blockdata = {
     {id = 1,breakTime = 0},
-    {id = 2,breakTime = 0, item = 2},
+    {id = 2,breakTime = 25, item = 2},
     {id = 3,breakTime = 100, item = 3},
     {id = 4,breakTime = 100, item = 4},
     {id = 5,breakTime = 100, item = 5},
     {id = 6,breakTime = 100, item = 6},
     {id = 7,breakTime = 100, item = 7},
-    {id = 8,breakTime = 100, item = 8}
+    {id = 8,breakTime = 100, item = 8},
+    {id = 9,breakTime = 10,item = 12}
     } --values for each block
+    self.itemData = {
+    {itemType = "material"},
+    {itemType = "material"},
+    {itemType = "material"},
+    {itemType = "material"},
+    {itemType = "material"},
+    {itemType = "material"},
+    {itemType = "material"},
+    {itemType = "material"},
+    {itemType = "material"},
+    {itemType = "material"},
+    {itemType = "material"},
+    {itemType = "material"},
+    {itemType = "material"},
+    {},
+    {},
+    {itemType = "pickaxe",level = 1,mspeed = 1},
+    {itemType = "pickaxe",level = 2,mspeed = 0.75},
+    {itemType = "pickaxe",level = 3,mspeed = 0.5},
+    {itemType = "pickaxe",level = 4,mspeed = 0.25}
+    }
     self.seed = seed --should be a value between 0 and 1
     self.threshold = th --should be a value between -1 and 1, depending on the size of mountains desired
     self.mapSize = 40 -- the size of the map
@@ -59,6 +81,16 @@ function World:basicGen()
             end
         end
     end
+    for x,v in pairs(self.worldMap) do
+        for y,b in pairs(v) do
+            if b.id == 1 then
+                if math.random(20) == 20 then
+                    self.worldMap[x][y] = block(9,5,b.meshIndex,b.lmi,self.blockdata[9].breakTime)
+                    self:setMeshBlock(b.meshIndex,9)
+                end
+            end
+        end
+    end
 end
 
 function World:setMeshBlock(index,id)
@@ -67,14 +99,24 @@ end
 
 function World:draw()
     -- Codea does not automatically call this method
+    pushMatrix()
     noStroke()
     noSmooth()
+    scale(2)
+    pushMatrix()
+    translate(-p.pos.x+(WIDTH/4),-p.pos.y+(HEIGHT/4))
     self.mesh:draw()
+    popMatrix()
     p:draw()
+    pushMatrix()
+    translate(-p.pos.x+WIDTH/4,-p.pos.y+HEIGHT/4)
     if self.light and g.state == STATE_MAIN then
         self.lightMesh:draw() -- only draw if self.light is true
     end
     self:renderEntities()
+    popMatrix()
+    popMatrix()
+    p:drawHeldItem()
 end
 
 function World:generateOres()
@@ -145,6 +187,13 @@ function World:breakBlock(x,y)
         self.worldMap[x][y].id = 1 -- set to air
         for i=-5,5 do
             for ii=-5,5 do
+                if x+i>0 and x+i<self.mapSize + 1 and y+ii>0 and y+ii<self.mapSize + 1 then
+                    self:updateLighting(x+i,y+ii) -- update the lighting around the block
+                end
+            end
+        end
+        for i=5,-5,-1 do
+            for ii=5,-5,-1 do
                 if x+i>0 and x+i<self.mapSize + 1 and y+ii>0 and y+ii<self.mapSize + 1 then
                     self:updateLighting(x+i,y+ii) -- update the lighting around the block
                 end

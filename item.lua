@@ -11,6 +11,9 @@ function item:init(id,count,x,y,sf)
     self.mesh.texture = items
     self.index = self.mesh:addRect(0,0,WIDTH/10,HEIGHT/10)
     self.mesh:setRectTex(self.index,((self.id-1)%5)/5 + 0.01,(5 - math.ceil(self.id/5))/5 + 0.01,0.19,0.19) 
+    self.itemType = w.itemData[id].itemType
+    self.level = w.itemData[id].level
+    self.mspeed = w.itemData[id].mspeed
 end
 
 function item:draw()

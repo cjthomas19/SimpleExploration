@@ -27,7 +27,7 @@ end
 -- This function gets called once every frame
 function draw()
     -- This sets a dark background color 
-    background(40, 40, 50)
+    background(0, 0, 0, 255)
 
     -- This sets the line thickness
     strokeWidth(5)
@@ -38,12 +38,13 @@ function draw()
         c:draw()
         b:draw()
     end
-    p:move(c.acc*4)
+    p:move(c.acc*2.5)
     if c.tId then
         p.rotation = c.rotation
+        p:incMesh()
     end
     if b.tId then
-        p:breakBlock(b.rotation)
+        p:useItem(b.rotation)
     end
     g:draw()
 end
