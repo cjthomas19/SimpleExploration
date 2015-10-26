@@ -21,7 +21,7 @@ function setup()
     b = CircleJoystick(WIDTH-100,100)
     touches = {}
     p = Player(w:convertFromWorld(2,2))
-    g = gui()
+    g = guiHandler()
 end
 
 -- This function gets called once every frame
@@ -45,6 +45,8 @@ function draw()
     end
     if b.tId then
         p:useItem(b.rotation)
+    else
+        p.swingPos = nil
     end
     g:draw()
 end

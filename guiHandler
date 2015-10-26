@@ -1,19 +1,19 @@
-gui = class()
+guiHandler = class()
 
-function gui:init()
+function guiHandler:init()
     -- you can accept and set parameters
     self.buttons = {inv = SquareButton(WIDTH-100,HEIGHT-100,50,50,readImage("Project:inv"),function() g.state = STATE_INV end,2),back = SquareButton(WIDTH-100,100,50,50,readImage("Project:back"),function() g.state = STATE_MAIN end,2),split = SquareButton(WIDTH-200,100,50,50,readImage("Project:split"),function() self.split = true end,2),craft = SquareButton(WIDTH-300,100,50,50,readImage("Project:craft"),function() local a = cr:getResult(p:idTable())
-    if a then
+        if a then
             p:decreaseCraftQuant(1)
             p:give(a.id,a.count,true)
         end
-         end,2)}
+    end,2)}
     self.state = STATE_MAIN
     self.guiScreens = {inv = readImage("Project:inventoryBackdrop")}
     self.touchState = 0
 end
 
-function gui:draw(i)
+function guiHandler:draw(i)
     -- Codea does not automatically call this method
     if self.state == STATE_MAIN then
         self.buttons.inv:draw()
@@ -25,7 +25,7 @@ function gui:draw(i)
     end
 end
 
-function gui:touched(touch)
+function guiHandler:touched(touch)
     -- Codea does not automatically call this method
     local tx,ty = math.ceil(touch.x/(WIDTH/10)),math.ceil(touch.y/(HEIGHT/10))
     local ttx,tty = math.ceil((touch.x-5.5*WIDTH/10)/(WIDTH/10)),math.ceil((touch.y-7*HEIGHT/10)/(HEIGHT/10))
@@ -90,14 +90,44 @@ function gui:touched(touch)
     end
 end
 
-function gui:splitItem(i)
+function guiHandler:splitItem(i)
     if p.inventory[i] and p.inventory[i].count>1 then
         p:give(p.inventory[i].id,math.ceil(p.inventory[i].count/2),false)
         p.inventory[i].count = math.floor(p.inventory[i].count/2)
     end
 end
 
-function gui:moveItem(i,ii,mode)
+
+--[[function guiHandler:moveItem(i,ii,tab1,tab2)
+    if not tab2 then tab2 = tab1 print(1)end
+    if tab2[i] then
+        if tab2[ii].id == tab1[i].id then
+            tab2[ii].count = tab2[ii].count + tab1[i].count
+            tab1[i] = nil
+            tab2[ii].x,tab2[ii].y = ((ii-1)%4)*WIDTH/10 + WIDTH/20,(math.ceil((ii)/4)-1)*HEIGHT/10+HEIGHT/20
+        else
+            local a = tab1[i]
+            local b = tab2[ii]
+            tab1[i] = item(b.id,b.count,b.x,b.y)
+            tab2[ii] = item(b.id,b.count,b.x,b.y)
+        end
+    else
+        local a = tab1[i]
+        tab2[ii] = item(a.id,a.count,a.x,a.y)
+        tab1[i] = nil
+    end
+end]]--
+
+function guiHandler:showInventory()
+    sprite(self.guiScreens.inv,WIDTH/2,HEIGHT/2,WIDTH,HEIGHT)
+    for i,v in pairs(p.inventory) do
+        v:draw()
+    end
+    for i,v in pairs(p.craftSlots) do
+        v:draw()
+    end
+end
+function guiHandler:moveItem(i,ii,mode)
     if i ~= ii and mode == 1 then
         if not p.inventory[ii] then
             local a = p.inventory[i]
@@ -178,14 +208,3 @@ function gui:moveItem(i,ii,mode)
         p.craftSlots[ii].x,p.craftSlots[ii].y = ((ii-1)%3)*WIDTH/10 + WIDTH/20+5.5*WIDTH/10,(math.ceil((ii)/3)-1)*HEIGHT/10+HEIGHT/20+7*HEIGHT/10
     end
 end
-
-function gui:showInventory()
-    sprite(self.guiScreens.inv,WIDTH/2,HEIGHT/2,WIDTH,HEIGHT)
-    for i,v in pairs(p.inventory) do
-        v:draw()
-    end
-    for i,v in pairs(p.craftSlots) do
-        v:draw()
-    end
-end
-

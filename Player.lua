@@ -27,6 +27,9 @@ function Player:draw()
     translate(WIDTH/4,HEIGHT/4)
     rotate(self.rotation)
     self.mesh:draw()
+    if self.swingPos then
+        self.inventory[1]:drawAt(self.d.x/2,0,self.swingPos,true)
+    end
     popMatrix()
 end
 
@@ -70,7 +73,27 @@ function Player:decreaseCraftQuant(q)
     end
 end
 
+--[[function Player:useItem(rot)
+local num
+if rot<=45 or rot>315 then
+num = 1
+elseif rot>45 and rot<=135 then
+num = 2
+elseif rot>135 and rot<=225 then
+num = 3
+else
+num=4
+end
+self.useTimer = self.useTimer + 1
+local bx,by = w:convertToWorld(self.pos.x,self.pos.y)
+bx,by = bx + ADJ[num].x, by + ADJ[num].y
+if (w.worldMap[bx][by].h<=10 and self.useTimer >= w.worldMap[bx][by].h) then
+self:breakBlock(bx,by)
+end
+end
+]]--
 function Player:useItem(rot)
+    self.useTimer = self.useTimer + 1
     local num
     if rot<=45 or rot>315 then
         num = 1
@@ -81,17 +104,39 @@ function Player:useItem(rot)
     else
         num=4
     end
-    self.useTimer = self.useTimer + 1
     local bx,by = w:convertToWorld(self.pos.x,self.pos.y)
     bx,by = bx + ADJ[num].x, by + ADJ[num].y
-    if bx>0 and bx < w.mapSize + 1 and by > 0 and by < w.mapSize + 1 then
-        if self.inventory[1] and w.worldMap[bx][by].h>10 and self.inventory[1].itemType == "pickaxe" and self.useTimer >= w.worldMap[bx][by].h * self.inventory[1].mspeed and self.inventory[1].level >= w.worldMap[bx][by].h/50 then
-            w:breakBlock(bx,by)
-            self.useTimer = 0
-        elseif w.worldMap[bx][by].h<=10 and self.useTimer >= w.worldMap[bx][by].h then
-            w:breakBlock(bx,by)
-            self.useTimer = 0
+    if self.inventory[1] and self.inventory[1].itemType == "pickaxe" then
+        if not self.swingPos then
+            if w.worldMap[bx][by].id ~= 1 then
+                self.swingPos = -10
+            end
+        else
+            if w.worldMap[bx][by].id ~= 1 then
+                self.swingPos = self.swingPos + 1 
+                if self.swingPos >= 10 then
+                    self.swingPos = nil
+                end
+            else
+                self.swingPos = nil
+            end
         end
+        if self.useTimer >= w.worldMap[bx][by].h * self.inventory[1].mspeed and self.inventory[1].level >= w.worldMap[bx][by].h/50 then
+            self:breakBlock(bx,by)
+        end
+    elseif self.inventory[1] and self.inventory[1].itemType == "weapon" then
+        
+    else
+        if w.worldMap[bx][by].h<=10 and self.useTimer >= w.worldMap[bx][by].h then
+            self:breakBlock(bx,by)
+        end
+    end
+end
+
+function Player:breakBlock(bx,by)
+    if bx>0 and bx < w.mapSize + 1 and by > 0 and by < w.mapSize + 1 then
+        w:breakBlock(bx,by)
+        self.useTimer = 0
     end
 end
 

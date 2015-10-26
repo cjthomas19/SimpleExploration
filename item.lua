@@ -26,3 +26,16 @@ function item:draw()
     text(self.count, WIDTH/40,-HEIGHT/30)
     popMatrix()
 end
+
+
+function item:drawAt(x,y,rot,bool)
+    pushMatrix()
+    translate(x,y)
+    rotate(rot)
+    if bool then
+        translate(0,HEIGHT/80)
+    end
+    scale(1/4)
+    self.mesh:draw()
+    popMatrix()
+end

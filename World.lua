@@ -30,10 +30,13 @@ function World:init(seed,th)
     {itemType = "material"},
     {},
     {},
-    {itemType = "pickaxe",level = 1,mspeed = 1},
+    {itemType = "pickaxe",level = 1,mspeed = 1,swingLength = 90},
     {itemType = "pickaxe",level = 2,mspeed = 0.75},
     {itemType = "pickaxe",level = 3,mspeed = 0.5},
-    {itemType = "pickaxe",level = 4,mspeed = 0.25}
+    {itemType = "pickaxe",level = 4,mspeed = 0.25},
+    {},
+    {},
+    {itemType = "weapon"}
     }
     self.seed = seed --should be a value between 0 and 1
     self.threshold = th --should be a value between -1 and 1, depending on the size of mountains desired
