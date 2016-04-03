@@ -34,6 +34,22 @@ function craftRecipes:init()
     {
     recipe = {nil,12,nil,11,11,11},
     result = {id = 19, count = 1}
+    },
+    {
+    recipe = {9,nil,nil,9,nil,nil},
+    result = {id = 14, count = 1}
+    },
+    {
+    recipe = {12,6,14,nil,6,nil},
+    result = {id = 21, count = 1}
+    },
+    {
+    recipe = {9,5,9,9,7,9},
+    result = {id = 15,count = 1}
+    },
+    {
+    recipe = {2,2,nil,2,2,nil},
+    result = {id = 24, count = 2}
     }
     }
 end

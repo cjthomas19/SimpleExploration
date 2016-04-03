@@ -18,7 +18,10 @@ function setup()
     w = World(math.random(1000)/1000,0)
     parameter.watch("1/DeltaTime")
     c = CircleJoystick(100,100)
-    b = CircleJoystick(WIDTH-100,100)
+    d1 = SquareButton(WIDTH-175,125,50,50,"Project:Left",function()  end,1)
+    d2 = SquareButton(WIDTH-75,125,50,50,"Project:Right",function()  end,1)
+    d3 = SquareButton(WIDTH-125,175,50,50,"Project:Up",function()  end,1)
+    d4 = SquareButton(WIDTH-125,75,50,50,"Project:Down",function()  end,1)
     touches = {}
     p = Player(w:convertFromWorld(2,2))
     g = guiHandler()
@@ -36,17 +39,27 @@ function draw()
     w:draw()
     if g.state == STATE_MAIN then
         c:draw()
-        b:draw()
+        d1:draw()
+        d2:draw()
+        d3:draw()
+        d4:draw()
+        if d1.pressed then
+            p:useItem(90)
+        elseif d2.pressed then
+            p:useItem(270)
+        elseif d3.pressed then
+            p:useItem(0)
+        elseif d4.pressed then
+            p:useItem(180)
+        else
+            p.placed = false
+            p.swingPos = nil
+        end
     end
     p:move(c.acc*2.5)
     if c.tId then
         p.rotation = c.rotation
         p:incMesh()
-    end
-    if b.tId then
-        p:useItem(b.rotation)
-    else
-        p.swingPos = nil
     end
     g:draw()
 end
@@ -54,7 +67,10 @@ end
 function touched(t)
     if g.state == STATE_MAIN then
         c:touched(t)
-        b:touched(t)
+        d1:touched(t)
+        d2:touched(t)
+        d3:touched(t)
+        d4:touched(t)
     end
     g:touched(t)
 end

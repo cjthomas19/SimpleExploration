@@ -20,7 +20,7 @@ function SquareButton:draw()
 end
 
 function SquareButton:touched(t)
-    if t.id ~= c.tId and t.id ~= b.tId and t.x>self.x-self.w/2 and t.x<self.x+self.w/2 and t.y>self.y-self.h/2 and t.y<self.y+self.h/2 and t.state~=ENDED and t.state~=CANCELLED then
+    if t.id ~= c.tId and t.x>self.x-self.w/2 and t.x<self.x+self.w/2 and t.y>self.y-self.h/2 and t.y<self.y+self.h/2 and t.state~=ENDED and t.state~=CANCELLED then
             self.pressed = true
             self.tId = t.id
             self.col = self.darkCol
@@ -34,5 +34,8 @@ function SquareButton:touched(t)
         if self.fcm == 2 then
             self.func()
         end
+    elseif self.tId == t.id and t.state == ENDED then
+        self.pressed = false
+        self.tId = nil
     end
 end

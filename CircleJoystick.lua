@@ -30,7 +30,7 @@ function CircleJoystick:touched(t)
     if vec2(t.x,t.y):dist(vec2(self.x,self.y))<=50 and t.state~=ENDED then
         self.tId=t.id
     end
-    if self.tId~=nil and self.tId == t.id then
+    if self.tId~=nil and self.tId == t.id and t.x ~= self.x and t.y ~= self.y then
         self.dif=vec2(t.x, t.y)-vec2(self.x,self.y)
         self.dif=self.dif:normalize()
         self.acc=self.dif
